@@ -9,6 +9,7 @@ import edu.fsuj.csb.reactionnetworks.database.InteractionDB;
 import edu.fsuj.csb.tools.organisms.Formula;
 import edu.fsuj.csb.tools.organisms.Substance;
 import edu.fsuj.csb.tools.urn.URN;
+import edu.fsuj.csb.tools.xml.Tools;
 
 public class DbSubstance extends Substance implements DBComponentMethods {
 
@@ -50,6 +51,7 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 
 	@Override
 	public Formula formula() {
+		Tools.startMethod("formula()");
 		if (super.formula()==null) try{
 			setFormula(InteractionDB.getFormula(id()));
     } catch (SQLException e) {
@@ -57,6 +59,7 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 		} catch (DataFormatException e) {
 	    e.printStackTrace();
     }
+		Tools.endMethod(super.formula());
 	  return super.formula();
 	}
 

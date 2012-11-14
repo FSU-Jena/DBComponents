@@ -9,6 +9,7 @@ import java.util.zip.DataFormatException;
 import edu.fsuj.csb.reactionnetworks.database.InteractionDB;
 import edu.fsuj.csb.tools.organisms.Reaction;
 import edu.fsuj.csb.tools.urn.URN;
+import edu.fsuj.csb.tools.xml.Tools;
 
 public class DbReaction extends Reaction implements DBComponentMethods {
 
@@ -55,11 +56,13 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 	 */
 	@Override
 	public TreeMap<Integer, Integer> products() {
+		Tools.startMethod("DbReaction.products()");
 		if (super.products()==null) try {
 			super.addProducts(InteractionDB.loadProducts(id()));
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
+		Tools.endMethod(super.products());
 		return super.products();
 	}
 	
@@ -68,12 +71,13 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 	 */
 	@Override
 	public TreeMap<Integer, Integer> substrates() {
-		//System.out.println("DbReaction.substrates()");
+		Tools.startMethod("DbReaction.substrates()");
 		if (super.substrates()==null) try {
 			super.addSubstrates(InteractionDB.loadSubstrates(id()));
 		} catch (SQLException e){
 			e.printStackTrace();
 		}
+		Tools.endMethod(super.substrates());
 		return super.substrates();
 	}
 
