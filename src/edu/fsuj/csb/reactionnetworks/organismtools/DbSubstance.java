@@ -1,5 +1,6 @@
 package edu.fsuj.csb.reactionnetworks.organismtools;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -35,6 +36,8 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 	    addNames(InteractionDB.getNames(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();
+    } catch (IOException e) {
+	    e.printStackTrace();
     }
 	  return super.names();
 	}
@@ -45,7 +48,9 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 			addUrns(InteractionDB.getURNsFor(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();			
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 	  return super.urns();
 	}
 
@@ -57,6 +62,8 @@ public class DbSubstance extends Substance implements DBComponentMethods {
     } catch (SQLException e) {
 	    e.printStackTrace();			
 		} catch (DataFormatException e) {
+	    e.printStackTrace();
+    } catch (IOException e) {
 	    e.printStackTrace();
     }
 		Tools.endMethod(super.formula());

@@ -1,5 +1,6 @@
 package edu.fsuj.csb.reactionnetworks.organismtools;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,6 +44,8 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	    addNames(InteractionDB.getNames(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();
+    } catch (IOException e) {
+	    e.printStackTrace();
     }
 	  return super.names();
 	}
@@ -56,7 +59,9 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 			addUrns(InteractionDB.getURNsFor(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();			
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 	  return super.urns();
 	}
 	
@@ -66,7 +71,9 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 			addEnzymes(InteractionDB.loadEnzymesOfCompartment(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();			
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 	  return super.enzymes();
 	}
 	
@@ -88,7 +95,10 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	  } catch (SQLException e) {
 	  	System.err.println(query);
 	  	e.printStackTrace();
-		}
+		} catch (IOException e) {
+	  	System.err.println(query);
+	    e.printStackTrace();
+    }
 		return result;
 	}
 	
@@ -132,7 +142,9 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	    } catch (SQLException e) {
 				System.err.println("Error on " + query);
 		    e.printStackTrace();			
-			} else {
+			} catch (IOException e) {
+	      e.printStackTrace();
+      } else {
 				//System.err.println("super.Reactions: "+super.reactions());
 			}
 		  return super.reactions();
@@ -154,7 +166,10 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	  } catch (SQLException e) {
 	  	System.err.println(query);
 	  	e.printStackTrace();
-		}
+		} catch (IOException e) {
+	  	System.err.println(query);
+	    e.printStackTrace();
+    }
 		return result;
 	}
 		
@@ -171,7 +186,7 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	
 	public void addContainedCompartment(int cid) {
 		containedCompartments(false);
-		super.addContainedCompartment(cid);
+    super.addContainedCompartment(cid);
 	}
 
 	public static Compartment get(int id){

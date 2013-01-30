@@ -1,5 +1,6 @@
 package edu.fsuj.csb.reactionnetworks.organismtools;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -34,6 +35,8 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 	    addNames(InteractionDB.getNames(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();
+    } catch (IOException e) {
+	    e.printStackTrace();
     }
 	  return super.names();
 	}
@@ -47,7 +50,9 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 			addUrns(InteractionDB.getURNsFor(id()));
     } catch (SQLException e) {
 	    e.printStackTrace();			
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 	  return super.urns();
 	}
 	
@@ -61,7 +66,9 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 			super.addProducts(InteractionDB.loadProducts(id()));
 		} catch (SQLException e){
 			e.printStackTrace();
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 		Tools.endMethod(super.products());
 		return super.products();
 	}
@@ -76,7 +83,9 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 			super.addSubstrates(InteractionDB.loadSubstrates(id()));
 		} catch (SQLException e){
 			e.printStackTrace();
-		}
+		} catch (IOException e) {
+	    e.printStackTrace();
+    }
 		Tools.endMethod(super.substrates());
 		return super.substrates();
 	}
@@ -103,6 +112,8 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 	      direction = InteractionDB.readDirections(cid,id());
 				super.addDirection(cid,direction);
       } catch (SQLException e1) {
+	      e1.printStackTrace();
+      } catch (IOException e1) {
 	      e1.printStackTrace();
       }
       return direction;
