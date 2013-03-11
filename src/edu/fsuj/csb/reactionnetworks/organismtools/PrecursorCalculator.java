@@ -29,15 +29,13 @@ public class PrecursorCalculator {
 		Stack<Integer> trace = new Stack<Integer>();
 		trace.push(substanceId);
 		TreeSet<TreeSet<Integer>> cycles = new TreeSet<TreeSet<Integer>>(ObjectComparator.get());
-		TreeSet<Integer> potPrecursors = new TreeSet<Integer>();
-		calculatePrecursorsOfSubstance(c,substanceId, trace, cycles, potPrecursors, ignoredSubstances);
+		TreeSet<Integer> potentialPrecursors = new TreeSet<Integer>();
+		calculatePrecursorsOfSubstance(c,substanceId, trace, cycles, potentialPrecursors, ignoredSubstances);
 		cycles = simplify(cycles);
-		for (Iterator<TreeSet<Integer>> cycleIt = cycles.iterator(); cycleIt.hasNext();) {
-			potPrecursors.removeAll(cycleIt.next());
-		}
-		System.out.println(potPrecursors.size() + " potential precursors");
+		for (TreeSet<Integer> cycle:cycles) potentialPrecursors.removeAll(cycle);
+		System.out.println(potentialPrecursors.size() + " potential precursors");
 		System.out.println(cycles.size() + " cycles");
-		return new SeedCalculationIntermediate(potPrecursors, cycles);
+		return new SeedCalculationIntermediate(potentialPrecursors, cycles);
 	}
 	
 	/**
@@ -54,8 +52,8 @@ public class PrecursorCalculator {
 	private static void calculatePrecursorsOfSubstance(Compartment c,int substanceId, Stack<Integer> trace, TreeSet<TreeSet<Integer>> cycles, TreeSet<Integer> potPrecursors, TreeSet<Integer> ignoredSubstances) throws SQLException {
 		// System.out.println("calculatePrecursorsOfSubstance("+Substance.get(substanceId).shortestName()+", trace="+print(trace)+", cont="+cycles+", pot="+potPrecursors+")");
 		boolean notProduced = true;
-		for (Iterator<Integer> reactionIterator = c.reactions().iterator(); reactionIterator.hasNext();) { // loop through all reactions of THIS compartment
-			Reaction reaction = Reaction.get(reactionIterator.next());
+		for (Integer reactionid : c.reactions()) { // loop through all reactions of THIS compartment
+			Reaction reaction = Reaction.get(reactionid);
 
 			if (reaction.firesForwardIn(c) && reaction.productIds().contains(substanceId)) {
 				if (trace.contains(-reaction.id())) {
@@ -97,8 +95,7 @@ public class PrecursorCalculator {
 	private static void calculatePrecursorsOfReaction(Compartment c,Reaction reaction, boolean backward, Stack<Integer> trace, TreeSet<TreeSet<Integer>> cycles, TreeSet<Integer> potPrecursors, TreeSet<Integer> ignoredSubstances) throws SQLException {
 		// System.out.println("calculatePrecursorsOfReaction("+reaction.shortestName()+", backward="+backward+", trace="+print(trace)+", cont="+cycles+", pot="+potPrecursors+")");
 		Collection<Integer> substrates = backward ? reaction.productIds() : reaction.substrateIds(); // if reaction is firing forward, then the substrates have to be examined. if not, then the products are of interest
-		for (Iterator<Integer> subsIt = substrates.iterator(); subsIt.hasNext();) { // examine all actual substrates of the reaction
-			int sid = subsIt.next();
+		for (Integer sid:substrates) { // examine all actual substrates of the reaction
 			if (ignoredSubstances!=null && ignoredSubstances.contains(sid)) continue; // skip ignored substances
 			if (trace.contains(sid)) { // if the examined substance already is in the trace, then we found a cycle
 				// System.out.println("Substance "+Substance.get(sid)+" already in trace:");
