@@ -13,6 +13,7 @@ import edu.fsuj.csb.reactionnetworks.database.InteractionDB;
 import edu.fsuj.csb.tools.organisms.Compartment;
 import edu.fsuj.csb.tools.organisms.ReactionSet;
 import edu.fsuj.csb.tools.urn.URN;
+import edu.fsuj.csb.tools.xml.XMLWriter;
 
 public class DbCompartment extends Compartment implements DBComponentMethods {
 
@@ -197,5 +198,20 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	    e.printStackTrace();
     }
 		return result;
+	}
+	
+	protected StringBuffer speciesList() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("\n<listOfSpecies>");		
+		for (Integer speciesId : this.utilizedSubstances()) {
+			try {
+				DbSubstance subs = DbSubstance.load(speciesId);
+				buffer.append(XMLWriter.shift(subs.getCode("c" + id(),false), 1));
+			} catch (SQLException e) {
+	      e.printStackTrace();
+      }
+		}
+		buffer.append("\n</listOfSpecies>");
+		return buffer;
 	}
 }
