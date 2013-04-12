@@ -47,7 +47,7 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	    e.printStackTrace();
     } catch (IOException e) {
 	    e.printStackTrace();
-    }
+	}
 	  return super.names();
 	}
 	

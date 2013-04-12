@@ -37,7 +37,7 @@ public class DbReaction extends Reaction implements DBComponentMethods {
 	    e.printStackTrace();
     } catch (IOException e) {
 	    e.printStackTrace();
-    }
+	}
 	  return super.names();
 	}
 	

@@ -38,7 +38,7 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 	    e.printStackTrace();
     } catch (IOException e) {
 	    e.printStackTrace();
-    }
+	}
 	  return super.names();
 	}
 	
