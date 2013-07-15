@@ -191,7 +191,7 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	}
 
 	public static Compartment get(int id){
-		Compartment result = Compartment.get(id);
+		Compartment result = Compartment.get(id);		
 		if (result==null) try {
 	    result=load(id);
     } catch (SQLException e) {
@@ -203,14 +203,20 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	protected StringBuffer speciesList() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("\n<listOfSpecies>");		
-		for (Integer speciesId : this.utilizedSubstances()) {
+		int number=utilizedSubstances().size()/50;
+		int count=0;
+		System.err.print("\n[");
+		for (Integer speciesId : utilizedSubstances()) {
 			try {
 				DbSubstance subs = DbSubstance.load(speciesId);
+				count++;
+				if (count%number==0) System.err.print("#");
 				buffer.append(XMLWriter.shift(subs.getCode("c" + id(),false), 1));
 			} catch (SQLException e) {
 	      e.printStackTrace();
       }
 		}
+		System.err.println(']');
 		buffer.append("\n</listOfSpecies>");
 		return buffer;
 	}
