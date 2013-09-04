@@ -119,4 +119,16 @@ public class DbReaction extends Reaction implements DBComponentMethods {
       return direction;
 		}		
 	}
+	
+	@Override
+	public Boolean isSpontan() {
+		if (spontan==null) try {
+	    spontan=InteractionDB.isSpontan(id());
+    } catch (SQLException e) {
+	    e.printStackTrace();
+    } catch (IOException e) {
+	    e.printStackTrace();
+    }
+		return spontan;
+	}
 }
