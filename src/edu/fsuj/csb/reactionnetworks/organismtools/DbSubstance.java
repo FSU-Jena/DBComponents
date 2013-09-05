@@ -87,7 +87,7 @@ public class DbSubstance extends Substance implements DBComponentMethods {
    * @return the xml tag for this substance
    * @throws SQLException 
    */
-  public StringBuffer getCode() {
+  public void getCode(StringBuffer result) {
   	Tools.startMethod("DbSubstance.getCode()");
   	tokenClass="species";
   	Vector<URN> urnList=null;
@@ -117,8 +117,7 @@ public class DbSubstance extends Substance implements DBComponentMethods {
   		annotation.add(rdf);  		
   		add(annotation);
   	}
-  	StringBuffer result=super.getCode();
-  	Tools.endMethod(result,40);
-  	return result;
+  	super.getCode(result);
+  	Tools.endMethod();
   }
 }

@@ -218,21 +218,18 @@ public class DbCompartment extends Compartment implements DBComponentMethods {
 	}
 
 	@Override
-	public StringBuffer getCode() {
+	public void getCode(StringBuffer result) {
 		Tools.startMethod("DbCompartment.getCode()");
 		tokenClass = "compartment";
-		StringBuffer result = super.getCode();
-		Tools.endMethod(result.subSequence(0, 10) + "...");
-		return result;
+		super.getCode(result);
+		Tools.endMethod();
 	}
 
 	protected XmlToken speciesList() {
 		Tools.startMethod("DbCompartment.speciesList()");
 		XmlToken sList = new XmlToken("listOfSpecies");
 
-		Tools.disableLogging();
 		TreeSet<Integer> subs = utilizedSubstances();
-		Tools.enableLogging();
 		int number = subs.size() / 50;
 		int count = 0;
 		System.err.print("\n[");

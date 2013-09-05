@@ -20,7 +20,7 @@ public class DbCompartmentNode extends CompartmentNode implements XmlObject{
 	}
 
 	@Override
-  public StringBuffer getCode() {
-		return compartment().getCode();
+  public void getCode(StringBuffer sb) {
+		compartment().getCode(sb);
   }
 }
