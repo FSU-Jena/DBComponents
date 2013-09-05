@@ -11,6 +11,7 @@ import edu.fsuj.csb.tools.organisms.Formula;
 import edu.fsuj.csb.tools.organisms.Substance;
 import edu.fsuj.csb.tools.urn.URN;
 import edu.fsuj.csb.tools.xml.Tools;
+import edu.fsuj.csb.tools.xml.XmlToken;
 
 public class DbSubstance extends Substance implements DBComponentMethods {
 
@@ -79,5 +80,45 @@ public class DbSubstance extends Substance implements DBComponentMethods {
 		// TODO: implement
 		throw new NullPointerException("Not implemented, yet.");
 	}
-
+	
+  /**
+   * creates a xml description of this substance, assigning it to the given compartment
+   * @param compartmentId the id of the compartment, which shall be referenced in the tag
+   * @return the xml tag for this substance
+   * @throws SQLException 
+   */
+  public StringBuffer getCode() {
+  	Tools.startMethod("DbSubstance.getCode()");
+  	tokenClass="species";
+  	Vector<URN> urnList=null;
+    try {
+	    urnList = urns();
+    } catch (DataFormatException e) {}
+  	if (urnList!=null && urnList.size()>0){
+  		XmlToken annotation = new XmlToken("annotation");
+  		XmlToken rdf=new XmlToken("rdf:RDF");
+  		rdf.setValue("xmlns:rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+  		rdf.setValue("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+  		rdf.setValue("xmlns:dcterms", "http://purl.org/dc/terms/");
+  		rdf.setValue("xmlns:vCard", "http://www.w3.org/2001/vcard-rdf/3.0#");
+  		rdf.setValue("xmlns:bqbiol", "http://biomodels.net/biology-qualifiers/");
+  		rdf.setValue("xmlns:bqmodel", "http://biomodels.net/model-qualifiers/");
+  		XmlToken rdfDescription=new XmlToken("rdf:Description");
+  		XmlToken bqBiolIs=new XmlToken("bqbiol:is");
+  		XmlToken rdfBag=new XmlToken("rdf:Bag");
+  		for (URN urn:urnList){
+  			XmlToken rdfLi = new XmlToken("rdf:li");
+  			rdfLi.setValue("rdf:resource", urn);
+  			rdfBag.add(rdfLi);
+  		}
+  		bqBiolIs.add(rdfBag);
+  		rdfDescription.add(bqBiolIs);
+  		rdf.add(rdfDescription);
+  		annotation.add(rdf);  		
+  		add(annotation);
+  	}
+  	StringBuffer result=super.getCode();
+  	Tools.endMethod(result,40);
+  	return result;
+  }
 }
